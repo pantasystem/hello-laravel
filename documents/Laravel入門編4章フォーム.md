@@ -65,10 +65,10 @@ BMIを測定
 <form method="POST" action="{{ route('bmi.store') }}">
     @csrf
     <div>
-        身長:<input type="text" name="height">
+        身長:<input type="text" name="height">cm
     </div>
     <div>
-        体重:<input type="text" name="weight">
+        体重:<input type="text" name="weight">kg
     </div>
     <button type="submit">送信</button>
         
