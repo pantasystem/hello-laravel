@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // 忘れないで！！
 use App\Http\Controllers\HelloController;
+use App\Http\Controllers\BMIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +32,7 @@ Route::get('/greet', [HelloController::class, 'greet']);
 Route::get('/judge/{number}', function($number){
     return view('judge', ['number' => $number]);
 })->where('number', '[0-9]+');
+
+Route::get('/bmi', [BMIController::class, 'index'])->name('bmi');
+
+Route::post('/bmi', [BMIController::class, 'store'])->name('bmi.store');
