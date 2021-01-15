@@ -96,6 +96,53 @@ public function store(BMIRequest $request)
 }
 ```
 
+これで入力値検証の適応完了です。
+
+## エラー内容を表示したい。
+入力値検証は実装することができたのですが、  
+しかしまだエラーの内容を表示することができていません。
+
+## bmi.blade.phpにエラーを表示する
+
+@errorディレクティブを利用することにより、  
+エラーとそのメッセージを表示することができます。  
+また他にも方法はあるので気になったら[ドキュメント](https://readouble.com/laravel/8.x/ja/validation.html)を見てください。
+```html
+@extends('layouts.app')
+
+@section('title')
+BMIを測定
+@endsection
+@section('content')
+<form method="POST" action="{{ route('bmi.store') }}">
+    @csrf
+    <div>
+        身長:<input type="text" name="height">cm
+    </div>
+    @error('height')
+        <div> {{ $message }}</div>
+    @enderror
+
+    <div>
+        体重:<input type="text" name="weight">kg
+    </div>
+
+    @error('weight')
+        <div>{{ $message }}</div>
+    @enderror
+    
+    @if(session('bmi'))
+    <div>
+        BMIは{{ session('bmi') }}です。
+    </div>
+    @endif
+    <button type="submit">送信</button>
+        
+</form>
+@endsection
+```
+
+
 ## 入力状態を維持したい
 送信ボタンを押すとPOSTされて、  
 BMIが計算され、その中身がsessionに書き込まれます。  

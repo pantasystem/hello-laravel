@@ -9,9 +9,18 @@ BMIを測定
     <div>
         身長:<input type="text" name="height">cm
     </div>
+    @error('height')
+        <div> {{ $message }}</div>
+    @enderror
+
     <div>
         体重:<input type="text" name="weight">kg
     </div>
+
+    @error('weight')
+        <div>{{ $message }}</div>
+    @enderror
+    
     @if(session('bmi'))
     <div>
         BMIは{{ session('bmi') }}です。
