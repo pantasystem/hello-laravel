@@ -150,3 +150,52 @@ return view('hello', ['message' => '<h1>はろーBladeデータは渡せたか�
 ```php
 {!! $message !!}
 ```
+
+## 構造的制御
+
+bladeの中で条件分岐したいときは以下のように書きます。
+```php
+@if(条件)
+ほげー
+@else if(条件)
+ふがー
+@else
+ぴよー
+@endif
+```
+
+せっかくなのでパラメーターの数値を基数偶数判定してみたいと思います。　　
+```./resources/views/judge.blade.php```ファイルを作成します。  
+書きます  
+~~ロジック間違ってそう~~
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello Blade!!</title>
+    </head>
+    <body>
+        <h1>基数偶数判定だ！！</h1>
+        @if($number % 2 == 0)
+            <p>偶数だ！！</p>
+        @else 
+            <p>奇数だ！！</p>
+        @endif
+    </body>
+</html>
+```
+
+routeを追加します。  
+気分的にControllerを経由するのが面倒だったのでrouteに直接書きます。  
+Controllerに書きたい人は書いてください。
+> /routes/web.php
+```php
+Route::get('/judge/{number}', function($number){
+    return view('judge', ['number' => $number]);
+})->where('number', '[0-9]+');
+```
+
+これはnumberパラメータが数値であるかをチェックしています。
+```php
+where('number', '[0-9]+')
+```

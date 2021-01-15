@@ -27,3 +27,7 @@ Route::get('/books/{bookNo}', function($bookNo){
 });
 
 Route::get('/greet', [HelloController::class, 'greet']);
+
+Route::get('/judge/{number}', function($number){
+    return view('judge', ['number' => $number]);
+})->where('number', '[0-9]+');
