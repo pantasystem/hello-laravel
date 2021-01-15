@@ -108,7 +108,7 @@ class BMIController extends Controller
 ```/bmi```にアクセスすると以下のような画面が表示されると思います。
 <img src="images/bmi-form.png" width="480">
 
-早速POSTを押してみましょう。  
+早速送信を押してみましょう。  
 エラーが表示されて今いました。  
 どうやらBMIControllerにstoreメソッドは存在しないぞ、と言われているようです。
 ```
@@ -122,3 +122,73 @@ web.phpを見たところPOST先はBMIControllerのstoreメソッドのようで
 ```php
 Route::post('/bmi', [BMIController::class, 'store'])->name('bmi.store');
 ```
+
+本当にPOSTされたのかわかりにくいので、「POSTされた」と表示することにします。
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class BMIController extends Controller
+{
+    //
+
+    public function index()
+    {
+        return view('bmi');
+    }
+
+    public function store()
+    {
+        echo "POSTされた";
+    }
+}
+```
+
+再度送信ボタンを押してみます。  
+うまくいけば「POSTされた」と表示されます。
+
+## パラメーターを受け取る
+storeメソッドの引数にRequest型の$request引数を追加してください。
+```
+public function store(Request $request)
+{
+    echo "POSTされた";
+}
+```
+
+パラメーターは以下のようにして取得することができます。
+```php
+public function store(Request $request)
+{
+    // 個別に取得する
+    $height = $request->input('height');
+    $weight = $request->input('weight');
+
+    // まとめて取得する(配列として取得される)
+    $heightAndWeight = $request->only('height', 'weight');
+
+    // すべて取得する(配列として取得される)
+    $all = $request->all();
+    echo "POSTされた";
+}
+```
+
+いろいろな方法がありますが、今回は、inputで取得します。  
+```php
+public function store(Request $request)
+{
+    // 個別に取得する
+    $height = $request->input('height');
+    $weight = $request->input('weight');
+
+    echo "height:" . $height . ", weight:"  .  $weight;
+}
+
+適当にフォームに入力して送信すると入力した値が画面に表示されると思います。
+```
+
+## 計算処理を実装する
+本来はModelに実装すべきですが、本題はそこではないのでControllerに実装します。

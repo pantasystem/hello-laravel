@@ -12,4 +12,13 @@ class BMIController extends Controller
     {
         return view('bmi');
     }
+
+    public function store(Request $request)
+    {
+        // 個別に取得する
+        $height = $request->input('height');
+        $weight = $request->input('weight');
+
+        echo "height:" . $height . ", weight:"  .  $weight;
+    }
 }
