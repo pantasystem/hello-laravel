@@ -192,3 +192,16 @@ public function store(Request $request)
 
 ## 計算処理を実装する
 本来はModelに実装すべきですが、本題はそこではないのでControllerに実装します。
+```php
+public function store(Request $request)
+{
+    // 個別に取得する
+    $height = $request->input('height');
+    $weight = $request->input('weight');
+
+
+    $bmi = $weight / pow($height / 100, 2);
+    echo "height:" . $height . ", weight:"  .  $weight . ", bmi:" . $bmi;
+}
+
+送信ボタンを押すとBMIが表示されると思います。

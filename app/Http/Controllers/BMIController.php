@@ -19,6 +19,8 @@ class BMIController extends Controller
         $height = $request->input('height');
         $weight = $request->input('weight');
 
-        echo "height:" . $height . ", weight:"  .  $weight;
+
+        $bmi = $weight / pow($height / 100, 2);
+        echo "height:" . $height . ", weight:"  .  $weight . ", bmi:" . $bmi;
     }
 }
