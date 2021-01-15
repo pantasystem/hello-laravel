@@ -1,4 +1,4 @@
-# Laravel入門編4章まとめ
+# Laravel入門編4章フォーム
 ここまでLaravelとMVCの関係や、  
 routeやController、bladeなどの学習をしてきました。  
 諸事情により説明できなかった部分もあったため、  
@@ -52,4 +52,73 @@ Route::get('/books/{bookId}/reviews/{reviewId}', [ReviewController::class, 'show
 bmi.blade.phpという名前で作成します。
 ```
 touch ./resources/views/bmi.blade.php
+```
+
+POSTリクエストが送信できることを確認したいのでフォームを作成します。
+```html
+@extends('layouts.app')
+
+@section('title')
+BMIを測定
+@endsection
+@section('content')
+<form method="POST" action="{{ route('bmi.store') }}">
+    @csrf
+    <div>
+        身長:<input type="text" name="height">
+    </div>
+    <div>
+        体重:<input type="text" name="weight">
+    </div>
+    <button type="submit">送信</button>
+        
+</form>
+@endsection
+
+```
+
+## BMIControllerからbmi.blade.phpを返す
+このままだとbmi.blade.phpを表示することができないので、  
+routeで実装したようにBMIControllerにindexメソッドを追加して、  
+そこからbmi.blade.phpを返すようにします。
+> routes/web.php
+```php
+Route::get('/bmi', [BMIController::class, 'index'])->name('bmi');
+```
+
+> BMIController::class
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class BMIController extends Controller
+{
+    //
+
+    public function index()
+    {
+        return view('bmi');
+    }
+}
+```
+
+```/bmi```にアクセスすると以下のような画面が表示されると思います。
+<img src="images/bmi-form.png" width="480">
+
+早速POSTを押してみましょう。  
+エラーが表示されて今いました。  
+どうやらBMIControllerにstoreメソッドは存在しないぞ、と言われているようです。
+```
+BadMethodCallException
+Method App\Http\Controllers\BMIController::store does not exist.
+```
+BMIControllerにPOST先のメソッドを実装していなかったので当然といえば当然ですね。
+
+## POST先を実装する
+web.phpを見たところPOST先はBMIControllerのstoreメソッドのようです。
+```php
+Route::post('/bmi', [BMIController::class, 'store'])->name('bmi.store');
 ```
