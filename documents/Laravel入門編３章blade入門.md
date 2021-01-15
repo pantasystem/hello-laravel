@@ -199,3 +199,17 @@ Route::get('/judge/{number}', function($number){
 ```php
 where('number', '[0-9]+')
 ```
+
+```http://localhost:8000/judge/9999```早速アクセスすると基数偶数の判定結果が表示されると思います。
+
+他にも@foreachや@swtichなどいろいろな構文があります。  
+[詳しくはドキュメントをご覧ください。](https://readouble.com/laravel/8.x/ja/blade.html)
+
+## レイアウトを共通化する
+ここまででblade.phpファイルを二つほど作成しました。  
+コード量は少なかったのでそこまで問題にはなりませんでしたが、  
+hello.blade.phpとjudge.blade.phpには似たような役目を持った部分が存在します。  
+このような部分をレイアウトとして切り出して共通化したいと思います。
+
+```./resources/views/```にlayoutsディレクトリを作成してください。  
+そこに```app.blade.php```を作成します。
