@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Hello Blade!!</title>
-    </head>
-    <body>
-        <h1>bladeに入門！！</h1>
-        <p>{{ $message }}</p>
+@extends('layouts.app')
 
-        <!--エスケープされない-->
-        <p>{!! $message !!}</p>
-    </body>
-</html>
+@section('title')
+Hello Blade
+@endsection
+@section('content')
+<h1>bladeに入門！！</h1>
+<p>{{ $message }}</p>
+
+<!--エスケープされない-->
+<p>{!! $message !!}</p>
+@endsection

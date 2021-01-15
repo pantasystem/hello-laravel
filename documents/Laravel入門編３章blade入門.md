@@ -213,3 +213,54 @@ hello.blade.phpとjudge.blade.phpには似たような役目を持った部分�
 
 ```./resources/views/```にlayoutsディレクトリを作成してください。  
 そこに```app.blade.php```を作成します。
+> app.blade.php
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@yield('title')</title>
+    </head>
+    <body>
+        @yield('content')
+    </body>
+</html>
+```
+
+hello.blade.phpをリファクタリングします
+> hello.blade.php
+```html
+@extends('layouts.app')
+
+@section('title')
+Hello Blade
+@endsection
+@section('content')
+<h1>bladeに入門！！</h1>
+<p>{{ $message }}</p>
+
+<!--エスケープされない-->
+<p>{!! $message !!}</p>
+@endsection
+```
+
+@extends('レイアウト名')で継承するレイアウトを指定します。  
+app.blade.phpとhello.blade.phpを見比べるとわかると思いますが、  
+@section()のカッコに書いた名前と@yield()のカッコに書いた、  
+対応する名前の@yieldで展開されたことがわかります。
+```html
+<!-- app.blade.php -->
+<body>
+@yield('content')
+</body>
+
+<!-- hello.blade.php -->
+@section('content')
+<h1>bladeに入門！！</h1>
+<p>{{ $message }}</p>
+
+<!--エスケープされない-->
+<p>{!! $message !!}</p>
+@endsection
+```
+
+続けてjudge.blade.phpも共通化します。
