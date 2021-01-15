@@ -12,6 +12,11 @@ BMIを測定
     <div>
         体重:<input type="text" name="weight">kg
     </div>
+    @if(session('bmi'))
+    <div>
+        BMIは{{ session('bmi') }}です。
+    </div>
+    @endif
     <button type="submit">送信</button>
         
 </form>

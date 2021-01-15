@@ -21,6 +21,7 @@ class BMIController extends Controller
 
 
         $bmi = $weight / pow($height / 100, 2);
-        echo "height:" . $height . ", weight:"  .  $weight . ", bmi:" . $bmi;
+        //echo "height:" . $height . ", weight:"  .  $weight . ", bmi:" . $bmi;
+        return redirect()->route('bmi')->with('bmi', $bmi);
     }
 }

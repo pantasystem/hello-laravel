@@ -203,5 +203,80 @@ public function store(Request $request)
     $bmi = $weight / pow($height / 100, 2);
     echo "height:" . $height . ", weight:"  .  $weight . ", bmi:" . $bmi;
 }
+```
 
 送信ボタンを押すとBMIが表示されると思います。
+
+## bladeでBMIを表示する
+POSTを受けた後  
+/bmiへリダイレクトしてbmi.blade.phpでBMIを表示したいです。  
+そのためにはまず、リダイレクトをします。
+```php
+public function store(Request $request)
+{
+    // 個別に取得する
+    $height = $request->input('height');
+    $weight = $request->input('weight');
+
+
+    $bmi = $weight / pow($height / 100, 2);
+    //echo "height:" . $height . ", weight:"  .  $weight . ", bmi:" . $bmi;
+
+    // 名前付きルート「bmi」へリダイレクト
+    return redirect()->route('bmi');
+}
+```
+
+再度/bmiで送信ボタンを押すと今度は/bmi画面に戻ってくると思います。  
+
+## リダイレクト先にデータを渡したい
+これはエラーや成功メッセージなどにも使われます。  
+最後に以下のようにwithを追加してください。  
+これはフラッシュと呼ばれるもので、セッションの仕組みを利用しています。
+```php
+return redirect()->route('bmi')->with('bmi', $bmi);
+```
+
+## BMIを表示する。
+bmi.blade.phpに処理を以下のように追加します。
+
+```html
+@extends('layouts.app')
+
+@section('title')
+BMIを測定
+@endsection
+@section('content')
+<form method="POST" action="{{ route('bmi.store') }}">
+    @csrf
+    <div>
+        身長:<input type="text" name="height">cm
+    </div>
+    <div>
+        体重:<input type="text" name="weight">kg
+    </div>
+    @if(session('bmi'))
+    <div>
+        BMIは{{ session('bmi') }}です。
+    </div>
+    @endif
+    <button type="submit">送信</button>
+        
+</form>
+@endsection
+```
+
+送信すると今度はBMIがbmi.blade.phpで表示されるようになりました。  
+
+<img src="./images/bmi-session.png">
+
+仕組みとしては、**フラッシュはセッションの仕組みを利用**しています。  
+まずif文でセッションにbmiがあるかをチェックします。  
+存在していればsessionからbmiを取り出して表示しています。
+```html
+@if(session('bmi'))
+<div>
+    BMIは{{ session('bmi') }}です。
+</div>
+@endif
+```
