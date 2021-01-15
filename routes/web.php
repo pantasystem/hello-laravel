@@ -20,12 +20,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function(){
-    echo "<h1>Hello Route</h1>";
-});
+Route::get('/hello', [HelloController::class, 'hello']);
 
 Route::get('/books/{bookNo}', function($bookNo){
     echo "<h1>" . $bookNo . "番の本ですよ！！</h1>";
 });
 
 Route::get('/greet', [HelloController::class, 'greet']);
+
+Route::get('/judge/{number}', function($number){
+    return view('judge', ['number' => $number]);
+})->where('number', '[0-9]+');

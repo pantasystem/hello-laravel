@@ -84,7 +84,7 @@ Route::get('/greet', [HelloController::class, 'greet']);
 
 基本的なき方としては
 ```php
-Route::アクション(パス, [コントローラーのクラス::class, '処理先のメソッド名']);
+Route::メソッド(パス, [コントローラーのクラス::class, '処理先のメソッド名']);
 ```
 
 またRoute::getのところをpostやputやdeleteなどに書き換えるだけで、  

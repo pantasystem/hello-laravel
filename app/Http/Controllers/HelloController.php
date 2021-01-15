@@ -16,4 +16,10 @@ class HelloController extends Controller
     {
         echo "<h1>" . $bookNo . "番の本ですよ！！</h1>";
     }
+
+    public function hello()
+    {
+        return view('hello', ['message' => '<h1>はろーBladeデータは渡せたかな？</h1>']);
+
+    }
 }
