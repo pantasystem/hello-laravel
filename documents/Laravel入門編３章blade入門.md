@@ -264,3 +264,22 @@ app.blade.phpとhello.blade.phpを見比べるとわかると思いますが、
 ```
 
 続けてjudge.blade.phpも共通化します。
+> judge.blade.php
+```html
+@extends('layouts.app')
+@section('title')
+    基数偶数判定
+@endsection
+
+@section('content')
+    <h1>基数偶数判定だ！！</h1>
+    @if($number % 2 == 0)
+        <p>偶数だ！！</p>
+    @else 
+    <p>奇数だ！！</p>
+    @endif
+@endsection
+```
+
+現状元のコード量が少ないのであまり恩恵が少ないですが、  
+メニューなどの共通要素などを実装するときやコード量が増えてきたときに強い恩恵が受けられると思います。
