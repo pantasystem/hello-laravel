@@ -45,7 +45,10 @@ Route::get('/hello', function(){
 });
 ```
 
-このようになります。
+このようになります。  
+**view関数の第一引数にblade.phpを取り除いた名前を文字列**で渡すと、  
+そのbladeが表示されます。
+
 ```php
 Route::get('/hello', function(){
     return view('hello');
@@ -91,4 +94,42 @@ class HelloController extends Controller
 }
 
 ```
+
+## bladeにデータを渡す
+このままではPHPを使用する意味はなくHTMLでいいじゃんとなってしまいます。  
+bladeにデータを渡す方法とそのデータを表示する方法を紹介します。  
+今のところ以下のようになっていたかと思います。  
+```php
+return view('hello');
+```
+
+view関数の第二引数に連想配列としてデータを渡すことができます。
+```php
+return view('hello', ['message' => 'はろーBladeデータは渡せたかな？']);
+```
+
+このままだと何も起こらないので、  
+hello.blade.phpに受け取ったデータを表示するようにします。
+> hello.blade.php
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello Blade!!</title>
+    </head>
+    <body>
+        <h1>bladeに入門！！</h1>
+        <p>{{ $message }}</p>
+    </body>
+</html>
+```
+
+以下のようにすることによって、  
+渡したデータを展開することができます。  
+```php
+{{ $message }}
+```
+
+## エスケープとblade
+
 

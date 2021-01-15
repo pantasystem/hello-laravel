@@ -5,5 +5,6 @@
     </head>
     <body>
         <h1>bladeに入門！！</h1>
+        <p>{{ $message }}</p>
     </body>
 </html>
