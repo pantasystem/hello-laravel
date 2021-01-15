@@ -144,11 +144,9 @@ BMIを測定
 
 
 ## 入力状態を維持したい
-送信ボタンを押すとPOSTされて、  
-BMIが計算され、その中身がsessionに書き込まれます。  
-そしてリダイレクトされsessionの中身があればbmi.blade.phpに表示されます。  
-現時点では結果表示時には入力状態は初期化されてしまっていますが、  
-結果表示時でも身長、体重の入力状態を維持できるようにします。  
+入力値に問題があった場合、入力値がすべて消え、エラーだけが表示されます。  
+これはユーザーにとってすべての入力をやり直すことを意味しUXとして最悪です。  
+そこでエラーがあった場合入力状態を維持するようにします。
 
 ## old関数
 old関数を利用することにより、以前の入力状態を表示することができます。  
@@ -156,4 +154,84 @@ old関数を利用することにより、以前の入力状態を表示する�
 通常では入力状態は消えてしまいますが、old関数を利用することにより復元することができます。
 
 ## 実装
-bmi.blade.phpを以下のように改修します。
+bmi.blade.phpを以下のように改修します。  
+```html
+@extends('layouts.app')
+
+@section('title')
+BMIを測定
+@endsection
+@section('content')
+<form method="POST" action="{{ route('bmi.store') }}">
+    @csrf
+    <div>
+        身長:<input type="text" name="height" value="{{ old('height') }}">cm
+    </div>
+    @error('height')
+        <div> {{ $message }}</div>
+    @enderror
+
+    <div>
+        体重:<input type="text" name="weight" value="{{ old('weight') }}">kg
+    </div>
+
+    @error('weight')
+        <div>{{ $message }}</div>
+    @enderror
+
+    @if(session('bmi'))
+    <div>
+        BMIは{{ session('bmi') }}です。
+    </div>
+    @endif
+    <button type="submit">送信</button>
+        
+</form>
+@endsection
+```
+
+oldヘルパ関数は以下のようにして利用することができます。
+```html
+value="{{ old(inputのname) }}"
+```
+
+## 動作チェック
+身長のみ正しい値を入力して、送信を押すと、  
+エラーが表示され、身長の値はキープされます。  
+これがoldヘルパ関数です。
+
+## メニューにbmiを追加する
+せっかく作ったのでapp.blade.phpのメニューにbmiを追加しましょう。
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@yield('title')</title>
+    </head>
+    <body>
+        <div>
+            <h1>はろーLaravel App</h1>
+            <ul>
+                <li><a href="/">Welcome</a></li>
+                <li><a href="/hello">Hello</a></li>
+                <li><a href="{{ route('bmi') }}">BMI</a></li>
+            </ul>
+        </div>
+        <div>
+            @yield('content')
+        </div>
+    </body>
+</html>
+```
+
+## まとめ
+入力値の検証をする方法を解説しました。  
+エラー内容を表示しました。  
+エラー時に入力内容を維持するようにしました。  
+次回からデータベースを取り扱っていきます。  
+これまでの内容はJavaScriptでできるようなことばかりで、  
+あまりPHPを利用するメリットはなかったのですが、  
+データベースと連携することにより、  
+フロントエンドのみではできなかったことができるようになります。  
+データベースを使う場合入力値のチェックやルーティングの重要性は増してくるので、  
+しっかりと理解してきましょう。

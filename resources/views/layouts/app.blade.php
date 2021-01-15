@@ -9,6 +9,7 @@
             <ul>
                 <li><a href="/">Welcome</a></li>
                 <li><a href="/hello">Hello</a></li>
+                <li><a href="{{ route('bmi') }}">BMI</a></li>
             </ul>
         </div>
         <div>
