@@ -126,8 +126,9 @@ MはModel、VはView、CはControllerの略称でそれぞれ以下のような�
 * Viewは表示処理
 * ControllerはModelとViewの繋ぎ  
 
-LaravelはこのMVCモデルを採用しています。
-<img src="what-mvc.png" width="600">
+LaravelはこのMVCモデルを採用しています。  
+<img src="what-mvc.png" width="600">  
+
 
 ## LaravelとMVCとディレクトリ
 MVCはコードをModel、View、Controllerの３つに機能別で分離する方法だと説明しました。  
