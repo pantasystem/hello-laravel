@@ -13,7 +13,7 @@ class BMIRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class BMIRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'height' => ['required', 'numeric'],
+            'weight' => ['required', 'numeric']
         ];
     }
 }
