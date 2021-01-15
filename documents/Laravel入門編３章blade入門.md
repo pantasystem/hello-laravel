@@ -283,3 +283,36 @@ app.blade.phpとhello.blade.phpを見比べるとわかると思いますが、
 
 現状元のコード量が少ないのであまり恩恵が少ないですが、  
 メニューなどの共通要素などを実装するときやコード量が増えてきたときに強い恩恵が受けられると思います。
+
+## メニューを追加する
+本当に共通化されたのかわかりにくいと思うので、  
+app.blade.phpにメニューを追加します。  
+実装の都合上、Judgeはメニューには実装できませんでしたが気にしないでください・・
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>@yield('title')</title>
+    </head>
+    <body>
+        <div>
+            <h1>はろーLaravel App</h1>
+            <ul>
+                <li><a href="/">Welcome</a></li>
+                <li><a href="/hello">Hello</a></li>
+            </ul>
+        </div>
+        <div>
+            @yield('content')
+        </div>
+    </body>
+</html>
+```
+
+## まとめ
+bladeはHTMLらしさを失うことなく、制御コードをや、レイアウトの共通化をすることがわかってもらえればうれしいです。  
+また今回紹介しきれなかった機能が他にもいろいろとあるので詳しくは[ドキュメント](https://readouble.com/laravel/8.x/ja/blade.html)を呼んでください。
+
+### 紹介しきれなかった機能
+* include(他のbladeを取り込む)
+* コンポーネント(bladeをタグとして使う)

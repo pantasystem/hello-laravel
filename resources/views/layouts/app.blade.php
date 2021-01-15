@@ -4,6 +4,15 @@
         <title>@yield('title')</title>
     </head>
     <body>
-        @yield('content')
+        <div>
+            <h1>はろーLaravel App</h1>
+            <ul>
+                <li><a href="/">Welcome</a></li>
+                <li><a href="/hello">Hello</a></li>
+            </ul>
+        </div>
+        <div>
+            @yield('content')
+        </div>
     </body>
 </html>
