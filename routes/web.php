@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+// 忘れないで！！
+use App\Http\Controllers\HelloController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,3 +27,5 @@ Route::get('/hello', function(){
 Route::get('/books/{bookNo}', function($bookNo){
     echo "<h1>" . $bookNo . "番の本ですよ！！</h1>";
 });
+
+Route::get('/greet', [HelloController::class, 'greet']);
