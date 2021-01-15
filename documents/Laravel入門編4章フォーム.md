@@ -26,7 +26,7 @@ use App\Http\Controllers\BMIController;
 // name()は名前付きルート
 Route::get('/bmi', [BMIController::class, 'index'])->name('bmi');
 
-Route::post('/bmi', [BMIController::class, 'store'])->name('bmi.store');
+Route::post('/bmi/send', [BMIController::class, 'store'])->name('bmi.store');
 ```
 
 
