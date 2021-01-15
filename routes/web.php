@@ -20,9 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function(){
-    return view('hello');
-});
+Route::get('/hello', [HelloController::class, 'hello']);
 
 Route::get('/books/{bookNo}', function($bookNo){
     echo "<h1>" . $bookNo . "番の本ですよ！！</h1>";
