@@ -21,7 +21,7 @@ Route::get('/', function () {
 });
 
 Route::get('/hello', function(){
-    echo "<h1>Hello Route</h1>";
+    return view('hello');
 });
 
 Route::get('/books/{bookNo}', function($bookNo){
