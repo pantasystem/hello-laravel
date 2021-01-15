@@ -19,6 +19,7 @@ class HelloController extends Controller
 
     public function hello()
     {
-        return view('hello', ['message' => 'はろーBladeデータは渡せたかな？']);
+        return view('hello', ['message' => '<h1>はろーBladeデータは渡せたかな？</h1>']);
+
     }
 }
