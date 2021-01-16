@@ -21,7 +21,7 @@ use App\Http\Controllers\NoteController;
 Route::get('/notes', [NoteController::class, 'index'])->name('notes');
 Route::get('/notes/new', [NoteController::class, 'new'])->name('notes.new');
 Route::get('/notes/{noteId}', [NoteController::class, 'show'])->name('get')->where(['noteId' => '[0-9]+']);
-Route::post('/notes', [NoteController::class, 'create'])->name('notes.create');
+Route::post('/notes', [NoteController::class, 'store'])->name('notes.create');
 
 Route::get('/', function () {
     return view('welcome');

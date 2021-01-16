@@ -341,7 +341,7 @@ use App\Http\Controllers\NoteController;
 Route::get('/notes', [NoteController::class, 'index'])->name('notes');
 Route::get('/notes/new', [NoteController::class, 'new'])->name('notes.new');
 Route::get('/notes/{noteId}', [NoteController::class, 'show'])->name('get')->where(['noteId' => '[0-9]+']);
-Route::post('/notes', [NoteController::class, 'create'])->name('notes.create');
+Route::post('/notes', [NoteController::class, 'store'])->name('notes.create');
 
 ```
 ## 作成フォームを作成する
@@ -397,7 +397,78 @@ public function new()
 }
 ```
 
-## バリデーションを作成する
+## 入力値チェックを作成する
 ```
 php artisan make:request CreateNoteRequest
 ```
+
+```php
+<?php
+
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class CreateNoteRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'title' => ['required', 'max:20'],
+            'text' => ['required', 'max:200']
+        ];
+    }
+}
+
+```
+
+## /notes postを受けれるようにする
+作成ボタンを押してもNoteControllerのstoreメソッドが存在しないため、  
+エラーが表示されてしまいます。  
+POSTリクエストとそのパラメーターを受け取り、  
+データベースにinsertする処理を実装します。
+
+NoteとCreateNoteRequestをuseするのを忘れないでください。
+> NoteController.php
+
+```php
+use App\Models\Note;
+use App\Http\Requests\CreateNoteRequest;
+```
+
+Modelに対してcreateメソッドを呼び出すことでデータベースにinsertすることができます。  
+createメソッドはカラム名をkey、挿入するデータをvalueとする連想配列を受けます。
+> NoteController.php
+```php
+public function store(CreateNoteRequest $request)
+{
+    // title, textを連想配列で取得します。
+    $params = $request->only('title', 'text');
+
+    $crated_note = Note::create($params);
+}
+```
+
+## 送信してみる
+適当に文字を入れて送信します。  
+データが作成さ・・エラーが出てしまいました。  
+
+
+
