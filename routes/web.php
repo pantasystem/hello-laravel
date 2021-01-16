@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 // 忘れないで！！
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\BMIController;
+use App\Http\Controllers\NoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,11 @@ use App\Http\Controllers\BMIController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/notes', [NoteController::class, 'index'])->name('notes');
+Route::get('/notes/new', [NoteController::class, 'new'])->name('notes.new');
+Route::get('/notes/{noteId}', [NoteController::class, 'show'])->name('get')->where(['noteId' => '[0-9]+']);
+Route::post('/notes', [NoteController::class, 'create'])->name('notes.create');
 
 Route::get('/', function () {
     return view('welcome');

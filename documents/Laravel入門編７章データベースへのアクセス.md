@@ -40,7 +40,7 @@ LaravelのMigrationはPHPでテーブルの作成や編集をするため、
 |/notes|get|notes|NoteController@index|投稿一覧|
 |/notes/{noteId}|notes.show|get|NoteController@show|投稿の詳細画面|
 |/notes/new|get|notes.new|NoteController@new|投稿作成画面|
-|/notes/create|post|notes.create|NoteController@store|投稿POST先|
+|/notes|post|notes.create|NoteController@store|投稿POST先|
 
 ## Noteモデルの作成
 ここでMVCモデルのおさらいをします。  
@@ -325,7 +325,7 @@ MariaDB [hello_laravel]> show columns from notes;
 |/notes|get|notes|NoteController@index|投稿一覧|
 |/notes/{noteId}|notes.show|get|NoteController@show|投稿の詳細画面|
 |/notes/new|get|notes.new|NoteController@new|投稿作成画面|
-|/notes/create|post|notes.create|NoteController@store|投稿POST先|
+|/notes|post|notes.create|NoteController@store|投稿POST先|
 
 ## Controllerを作成する
 ```
@@ -334,7 +334,15 @@ php artisan make:controller NoteController
 
 ルーティングします。
 > routes/web.php
-```
+```php
+use App\Http\Controllers\NoteController;
+
+/* 以前書いたコードは省略しています。 */
+Route::get('/notes', [NoteController::class, 'index'])->name('notes');
+Route::get('/notes/new', [NoteController::class, 'new'])->name('notes.new');
+Route::get('/notes/{noteId}', [NoteController::class, 'show'])->name('get')->where(['noteId' => '[0-9]+']);
+Route::post('/notes', [NoteController::class, 'create'])->name('notes.create');
+
 ```
 ## 作成フォームを作成する
 少しデータベースの話から外れてしまいますが、  
@@ -377,4 +385,19 @@ bladeで作成フォームを作成します。
     </div>
 </form>
 @endsection    
+```
+
+## 作成フォームを表示できるようにする
+NoteControllerのnewメソッドからnew_noteを表示するようにします。
+> NoteController.php
+```php
+public function new()
+{
+    return view('new_note');
+}
+```
+
+## バリデーションを作成する
+```
+php artisan make:request CreateNoteRequest
 ```
