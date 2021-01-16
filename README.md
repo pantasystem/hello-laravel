@@ -9,3 +9,4 @@
 * [Laravel入門編 4章 フォーム](./documents/Laravel入門編4章フォーム.md)
 * [Laravel入門編 ５章 入力値検証](./documents/Laravel入門編５章入力値検証.md)
 * [Laravel入門編 ６章 データベースの全体像](./documents/Laravel入門編６章データベースの全体像)
+* [Laravel入門編 ７章 データベース](./documents/Laravel入門編７章データベース.md)
