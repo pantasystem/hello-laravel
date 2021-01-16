@@ -315,8 +315,62 @@ MariaDB [hello_laravel]> show columns from notes;
 5 rows in set (0.021 sec)
 ```
 
+## routeとControllerを作成する
+作成画面とそのPOST先と一覧画面が必要です。  
+そのためのControllerとRouteを作成します。
+
+ルートとControllerの仕様は以下の通りです。
+|path|メソッド|名前|コントローラー@メソッド|説明|
+|-|-|-|-|-|
+|/notes|get|notes|NoteController@index|投稿一覧|
+|/notes/{noteId}|notes.show|get|NoteController@show|投稿の詳細画面|
+|/notes/new|get|notes.new|NoteController@new|投稿作成画面|
+|/notes/create|post|notes.create|NoteController@store|投稿POST先|
+
+
+ルーティングします。
+> routes/web.php
+```
+```
 ## 作成フォームを作成する
 少しデータベースの話から外れてしまいますが、  
 bladeで作成フォームを作成します。  
 (本題はbladeの作成ではないのでコピペしてもらっても構いません)
+新たにbladeファイルを作成します。  
+```touch ./resources/views/new_note.blade.php```
+
+> new_note.blade.php
+```html
+@extends('layouts.app')
+
+@section('title')
+メモを作成
+@endsection
+@section('content')
+<form method="POST" action="{{ route('notes.create') }}">
+    @csrf
+
+    <div>
+        タイトル:<input type="text" name="title" value="{{ old('title') }}">
+        @error('title') 
+            <p> {{ $message }}</p> 
+        @enderror
+    </div>
+    <div>
+        <p>本文:</p>
+        <textarea type="text" name='text'>
+            {{ old('text')}}    
+        </textarea>
+        @error('text')
+            <p> 
+                {{ $message }}
+            </p>
+        @enderror
+    
+    </div>
+    <div>
+        <button type="submit">作成</button>
+    </div>
+</form>
+@endsection    
 ```
