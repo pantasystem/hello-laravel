@@ -327,6 +327,10 @@ MariaDB [hello_laravel]> show columns from notes;
 |/notes/new|get|notes.new|NoteController@new|投稿作成画面|
 |/notes/create|post|notes.create|NoteController@store|投稿POST先|
 
+## Controllerを作成する
+```
+php artisan make:controller NoteController
+```
 
 ルーティングします。
 > routes/web.php
