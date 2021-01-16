@@ -181,3 +181,142 @@ class CreateNotesTable extends Migration
     }
 }
 ```
+
+## データベースの接続設定
+早速Migrationを実行してみたいところですが、  
+その前にデータベースの接続情報をLaravelに設定する必要があります。  
+設定情報は./.envに書きます。
+```env
+
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
+
+LOG_CHANNEL=stack
+LOG_LEVEL=debug
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=
+
+BROADCAST_DRIVER=log
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+
+MEMCACHED_HOST=127.0.0.1
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=null
+MAIL_FROM_NAME="${APP_NAME}"
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_APP_CLUSTER=mt1
+
+MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+
+```
+
+MySQLにデータベースを作成していなかったので作成します。
+```cmd
+mysql -u root -p
+MariaDB [(none)]> create database hello_laravel;
+Query OK, 1 row affected (0.009 sec)
+```
+
+早速設定します。
+ポート名やパスワードやユーザー名は環境に合わせて設定してください。
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=hello_laravel
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+## migrationの実行
+以下のコマンドを実行することによってmigrationが実行されます。
+
+```
+php artisan migrate
+```
+
+また個人的には以下のコマンドをよく使います。  
+
+またmigrationを取り消したいときは
+```
+php artisan migrate:rollback
+```
+
+初期化したいときは
+```
+php artisan migrate:reset
+```
+
+初期化してmigrationしたいときは
+```
+php artisan migrate:refresh
+```
+
+## テーブルが作成されたか確認する
+mysqlで確認してみます。  
+データベースのテーブルはshow tablesなどで確認できます。
+```
+MariaDB [hello_laravel]> show tables;
++-------------------------+
+| Tables_in_hello_laravel |
++-------------------------+
+| failed_jobs             |
+| migrations              |
+| notes                   |
+| password_resets         |
+| users                   |
++-------------------------+
+5 rows in set (0.000 sec)
+```
+
+notesテーブルの情報を見てみましょう。  
+仕様通りに作成することができました。
+```
+MariaDB [hello_laravel]> show columns from notes;
++------------+---------------------+------+-----+---------+----------------+
+| Field      | Type                | Null | Key | Default | Extra          |
++------------+---------------------+------+-----+---------+----------------+
+| id         | bigint(20) unsigned | NO   | PRI | NULL    | auto_increment |
+| created_at | timestamp           | YES  |     | NULL    |                |
+| updated_at | timestamp           | YES  |     | NULL    |                |
+| title      | varchar(20)         | NO   |     | NULL    |                |
+| text       | varchar(200)        | NO   |     | NULL    |                |
++------------+---------------------+------+-----+---------+----------------+
+5 rows in set (0.021 sec)
+```
+
+## 作成フォームを作成する
+少しデータベースの話から外れてしまいますが、  
+bladeで作成フォームを作成します。  
+(本題はbladeの作成ではないのでコピペしてもらっても構いません)
+```
