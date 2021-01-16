@@ -559,6 +559,9 @@ public function index()
 }
 ```
 
+## 動作確認
+作成したメモのタイトルが一覧表示されていると思います。  
+<img src="./images/notes-list.png" widht="400">
 
 ## まとめ
 migrationの役割とレコードの挿入方法を紹介しました。  
