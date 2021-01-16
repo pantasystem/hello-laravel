@@ -535,8 +535,11 @@ Noteをnotesという配列で受け取りそれをforeachを使って一覧表�
     <ul>
         @foreach($notes as $note)
             <li>
-                <!-- タイトルを表示する -->
-                {{ $note->title }}
+                <!--詳細画面のリンクを設定する-->
+                <a href="{{ route('get', ['noteId' => $note->id ])}}">
+                    <!-- タイトルを表示する -->
+                    {{ $note->title }}
+                </a>
             </li>
         @endforeach
     </ul>
@@ -562,6 +565,47 @@ public function index()
 ## 動作確認
 作成したメモのタイトルが一覧表示されていると思います。  
 <img src="./images/notes-list.png" widht="400">
+
+## 詳細画面
+```html
+@extends('layouts.app')
+
+@section('title')
+{{ $note->title }}
+@endsection
+
+@section('content')
+<div>
+    <h2>{{ $note->title }}</h2>
+    <p>
+        {{ $note->text }}
+    </p>
+    <a href="{{ route('notes')}}">一覧へ</a>
+</div>
+@endsection
+```
+
+## コントローラーを実装
+仕様とその実装であるルーターによると、  
+NoteControllerのshowメソッドが詳細表示用のメソッドのようです。 
+```php
+Route::get('/notes/{noteId}', [NoteController::class, 'show'])->name('get')->where(['noteId' => '[0-9]+']);
+``` 
+
+## showメソッドを実装
+$noteIdパラメーターを引数から受けます。
+```php
+public function show($noteId)
+{
+    // noteIdをもとにNoteを取得します。
+    // select * from notes where id = $noteId limit 1;
+    // $noteIdのノートが存在しなかった場合404 Not foundが表示されます
+    $note = Note::findOrFail($noteId);
+    return view('notes_detail', ['note' => $note]);
+
+}
+```
+
 
 ## まとめ
 migrationの役割とレコードの挿入方法を紹介しました。  

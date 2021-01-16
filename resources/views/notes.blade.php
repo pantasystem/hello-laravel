@@ -10,8 +10,11 @@
     <ul>
         @foreach($notes as $note)
             <li>
-                <!-- タイトルを表示する -->
-                {{ $note->title }}
+                <!--詳細画面のリンクを設定する-->
+                <a href="{{ route('get', ['noteId' => $note->id ])}}">
+                    <!-- タイトルを表示する -->
+                    {{ $note->title }}
+                </a>
             </li>
         @endforeach
     </ul>

@@ -28,4 +28,13 @@ class NoteController extends Controller
         $notes = Note::all();
         return view('notes', ['notes' => $notes]);
     }
+
+    public function show($noteId)
+    {
+        // noteIdをもとにNoteを取得します。
+        // select * from notes where id = $noteId limit 1;
+        // $noteIdのノートが存在しなかった場合404 Not foundが表示されます
+        $note = Note::findOrFail($noteId);
+        return view('notes_detail', ['note' => $note]);
+    }
 }
