@@ -20,5 +20,12 @@ class NoteController extends Controller
         $params = $request->only('title', 'text');
 
         $crated_note = Note::create($params);
+        return redirect()->route('notes');
+    }
+
+    public function index()
+    {
+        $notes = Note::all();
+        return view('notes', ['notes' => $notes]);
     }
 }

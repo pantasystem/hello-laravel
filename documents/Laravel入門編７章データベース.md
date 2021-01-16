@@ -1,4 +1,4 @@
-# Laravel入門編 ７章 データベースへのアクセス
+# Laravel入門編 ７章 データベース
 前回はLaravelのデータベースの全体像を紹介しました。  
 今回はメモ帳アプリを開発しながら具体的なデータベースへのアクセス方法を説明します。  
 
@@ -443,7 +443,7 @@ class CreateNoteRequest extends FormRequest
 作成ボタンを押してもNoteControllerのstoreメソッドが存在しないため、  
 エラーが表示されてしまいます。  
 POSTリクエストとそのパラメーターを受け取り、  
-データベースにinsertする処理を実装します。
+データベースに挿入する処理を実装します。
 
 NoteとCreateNoteRequestをuseするのを忘れないでください。
 > NoteController.php
@@ -453,7 +453,7 @@ use App\Models\Note;
 use App\Http\Requests\CreateNoteRequest;
 ```
 
-Modelに対してcreateメソッドを呼び出すことでデータベースにinsertすることができます。  
+Modelに対してcreateメソッドを呼び出すことでデータベースに挿入することができます。  
 createメソッドはカラム名をkey、挿入するデータをvalueとする連想配列を受けます。
 > NoteController.php
 ```php
@@ -470,5 +470,96 @@ public function store(CreateNoteRequest $request)
 適当に文字を入れて送信します。  
 データが作成さ・・エラーが出てしまいました。  
 
+<img src="./images/binding-error.png" width="600">
+
+fillメソッドやcreateメソッド、updateメソッドなどで更新をするときは、  
+$fillableに注入するデータの許可をしておかないといけません。
+
+app\Models\Note.phpをエディターで開きます。  
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Note extends Model
+{
+    use HasFactory;
+    
+    // 追加する
+    protected $fillable = ['title', 'text'];
+}
+
+```
+
+再度作成してみます。  
+特にリダイレクトも何もしていないので真っ白な画面が表示されます。  
+直接データベースを確認してみます。  
+新たにレコードが挿入されていれば成功です。
+```
+MariaDB [hello_laravel]> select * from notes;
++----+---------------------+---------------------+-------+----------+
+| id | created_at          | updated_at          | title | text     |
++----+---------------------+---------------------+-------+----------+
+|  1 | 2021-01-16 07:30:20 | 2021-01-16 07:30:20 | awef  | awefawef |
++----+---------------------+---------------------+-------+----------+
+1 row in set (0.000 sec)
+```
+
+## 一覧画面に遷移する
+作成後何も表示されないのはUXとしてはだめなので、  
+とりあえず一覧画面に遷移するようにします。  
+NoteControllerのstoreメソッドの最後の行に追加してください。
+```php
+return redirect()->route('notes');
+```
+
+## 一覧画面を実装する
+
+bladeファイルを作成します。  
+名前は```notes.blade.php```にしました。  
+Noteをnotesという配列で受け取りそれをforeachを使って一覧表示しています。
+
+```html
+@extends('layouts.app')
+
+@section('title')
+メモ一覧
+@endsection
+
+@section('content')
+<div>
+    <h2>メモ一覧</h2>
+    <ul>
+        @foreach($notes as $note)
+            <li>
+                <!-- タイトルを表示する -->
+                {{ $note->title }}
+            </li>
+        @endforeach
+    </ul>
+    <a href="{{ route('notes.new')}}">新規作成</a>
+</div>
+@endsection
+```
+
+## indexメソッドを実装する
+データベースからNoteを取得して、  
+それをnotes.blade.phpに渡すためのindexメソッドを実装します。
+```php
+public function index()
+{
+    // すべて取得
+    // select * from notes;
+    $notes = Note::all();
+
+    return view('notes', ['notes' => $notes]);
+}
+```
 
 
+## まとめ
+migrationの役割とレコードの挿入方法を紹介しました。  
+次回はまだ実装できていない一覧表示と詳細を実装します。
