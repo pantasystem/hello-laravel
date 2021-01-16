@@ -60,4 +60,124 @@ php artisan make:model Note -m
 ```
 
 ## Migrationの作成
-migrationは
+migrationは```php artisan make:migration```コマンドで作成します。  
+今回はModelの作成と同時にMigrationを作成したため、  
+さらにMigrationを作る必要はありません。  
+Migrationは命名などにルールがあるので後で[ドキュメント](https://readouble.com/laravel/8.x/ja/migrations.html)を読んでおくことをお勧めします
+
+## Migrationの作成場所  
+Migrationは./database/migrationsに作成されます。  
+その中に先ほど作成した```年_月_日_時間_create_notes_table.php``` migrationファイルがあるのでエディターで開きます。  
+(※年月日時間は作成時間によって変わります)
+
+> 2021_01_16_052702_create_notes_table.php
+
+開いてみると以下のような状態になっていると思います。  
+CreateNotesTableクラスには  
+upメソッドとdownメソッドがあることがわかります。  
+|メソッド名|役割|
+|-|-|
+|up|migrationを実行するときに実行される。|
+|down|migrationを取り消したいときに実行される。|
+
+
+```php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateNotesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('notes', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('notes');
+    }
+}
+
+```
+
+## id
+主キーのことで型はunsigned bigInteger型の主キー制約でAUTOINCREMENTが設定されます。
+
+## timestamp
+date型のupdated_atとcreated_atが作成され、  
+作成時、更新時に自動的に時間が記録されます。
+
+## 列を実装する
+列を作成する基本的な構文は以下のようになります。
+```php
+$table->対応する型のメソッド('列名');
+```
+
+varchar(20)のtitleを作成したいのでドキュメントを見たところ、  
+varcharに対応するのはstringメソッドのようです。  
+引数に設定したい列名を渡してあげます。
+```php
+$table->string('title', 20);
+```
+
+引き続きvarchar(200)の本文(text)を作成します。
+```php
+$table->string('text', 200);
+```
+
+他にもいろいろなデータ型の列を宣言することができます。  
+[カラムの作成](https://readouble.com/laravel/8.x/ja/migrations.html#creating-columns)
+
+
+ここまでのコード
+```php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateNotesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('notes', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('title', 20);
+            $table->string('text', 200);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('notes');
+    }
+}
+```
