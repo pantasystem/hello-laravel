@@ -10,3 +10,4 @@
 * [Laravel入門編 ５章 入力値検証](./documents/Laravel入門編５章入力値検証.md)
 * [Laravel入門編 ６章 データベースの全体像](./documents/Laravel入門編６章データベースの全体像.md)
 * [Laravel入門編 ７章 データベース](./documents/Laravel入門編７章データベース.md)
+* [Laravel入門編 ８章 更新と削除](./documents/Laravel入門編８章更新と削除.md)
