@@ -26,13 +26,15 @@ HTMLのFormはなぜかサポートしていませんが、
 あくまでも設計の問題なのでその時その時のケースに合わせて使ってほしいです。  
 
 ## ルートの仕様
-更新と削除のルートを追加したルートの仕様です。
+更新と削除のルートを追加したルートの仕様です。  
+先ほど説明したPUT, DELETEを使用しています。
 |path|メソッド|名前|コントローラー@メソッド|説明|
 |-|-|-|-|-|
 |/notes|get|notes|NoteController@index|投稿一覧|
 |/notes/{noteId}|get|get|NoteController@show|投稿の詳細画面|
 |/notes/new|get|notes.new|NoteController@new|投稿作成画面|
 |/notes|post|notes.create|NoteController@store|投稿POST先|
+|/notes/{noteId}/update|get|notes.edit|NoteController@edit|編集画面|
 |/notes/{noteId}|put|notes.update|NoteController@update|メモを更新する|
 |/notes/{noteId}|delete|notes.delete|NoteController@delete|メモを削除する|
 ## ルートを作成する
@@ -47,3 +49,6 @@ Route::post('/notes', [NoteController::class, 'store'])->name('notes.create');
 Route::put('/notes/{noteId}', [NoteController::class, 'update'])->name('notes.update')->where(['noteId' => '[0-9]+']);
 Route::delete('/notes/{noteId}', [NoteController::class, 'delete'])->name('notes.delete')->where(['noteId' => '[0-9]+']);
 ```
+
+## 更新画面を作成する
+更新するための画面を作成します。 
