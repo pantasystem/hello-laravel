@@ -238,3 +238,8 @@ public function delete($noteId)
     // 一覧画面へ遷移する
     return redirect()->route('notes');
 }
+```
+
+## まとめ
+今回はPUT, DELETEメソッドと削除と更新の方法についての解説をしました。  
+次回は未定ですが、認証かリレーションをEloquentで簡単に扱う方法を紹介したいと思います。
