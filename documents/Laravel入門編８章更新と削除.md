@@ -153,9 +153,88 @@ public function update(CreateNoteRequest $request, $noteId)
 
     // 詳細画面に遷移する
     return redirect()->route('get', ['noteId' => $noteId]);
-    
+
 }
 
 ```
 
+## 編集画面へ遷移できるようにする
+現時点ではいずれの画面からも編集画面へ遷移することができないので、  
+詳細画面から編集画面へ遷移できるようにしたいと思います。
+notes_detailを開きます。  
+編集先のリンクを追加します。
+> notes_detail
+```html
+@extends('layouts.app')
 
+@section('title')
+{{ $note->title }}
+@endsection
+
+@section('content')
+<div>
+    <h2>{{ $note->title }}</h2>
+    <p>
+        {{ $note->text }}
+    </p>
+    <a href="{{ route('notes')}}">一覧へ</a>
+    <a href="{{ route('notes.edit', ['noteId' => $note->id])}}">編集</a>
+</div>
+@endsection
+```
+
+## 動作確認
+正しく実装できていれば、更新後詳細画面へ遷移すると思います。
+
+## 削除処理の仕様
+詳細画面に削除ボタンを置いて削除したいのですが、  
+削除してしまう前に確認画面を表示するようにしたいです。  
+確認画面はいくつかの方法が存在します。  
+* PHPで何とかする
+* JavaScriptで何とかする
+* 現実は非情である
+
+ですが今回は削除が本題であって、確認画面を作成するのはメインではありません。  
+そのため「現実は非情である」を選択します。  
+そのため仕様は詳細画面に削除ボタンを置いて押したら削除すようにします。
+
+## 削除ボタンの実装
+DELETEメソッドを使用するのでFORMを使用して実装します。
+```html
+@extends('layouts.app')
+
+@section('title')
+{{ $note->title }}
+@endsection
+
+@section('content')
+<div>
+    <h2>{{ $note->title }}</h2>
+    <p>
+        {{ $note->text }}
+    </p>
+    <a href="{{ route('notes')}}">一覧へ</a>
+    <a href="{{ route('notes.edit', ['noteId' => $note->id])}}">編集</a>
+    <form method="POST" action="{{ route('notes.delete', ['noteId' => $note->id])}}">
+        @csrf
+        @method('DELETE')
+        <button type="submit">完全に削除する</button>
+    </form>
+</div>
+@endsection
+```
+
+## NoteControllerにdeleteメソッド実装する
+取得したNoteインスタンスに対してdeleteメソッドを呼び出して、  
+一覧画面へリダイレクトしているだけの至って単純な実装です。
+```php
+public function delete($noteId)
+{
+    $note = Note::findOrFail($noteId);
+
+    // 削除する
+    $note->delete();
+
+    // 一覧画面へ遷移する
+    return redirect()->route('notes');
+}

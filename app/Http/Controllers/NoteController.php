@@ -63,4 +63,15 @@ class NoteController extends Controller
         // 詳細画面に遷移する
         return redirect()->route('get', ['noteId' => $noteId]);
     }
+
+    public function delete($noteId)
+    {
+        $note = Note::findOrFail($noteId);
+
+        // 削除する
+        $note->delete();
+
+        // 一覧画面へ遷移する
+        return redirect()->route('notes');
+    }
 }
