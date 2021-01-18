@@ -52,9 +52,10 @@ Route::delete('/notes/{noteId}', [NoteController::class, 'delete'])->name('notes
 
 ## 更新画面を作成する
 更新するための画面を作成します。  
-ほとんど新規作成画面(new_note.blade.php)と変わりませんが変化した部分を説明していきます。
+ほとんど新規作成画面(new_note.blade.php)と変わりませんが、  
+変化した特に重要な部分を説明していきます。
 
-```php
+```html
 @extends('layouts.app')
 
 @section('title')
@@ -89,3 +90,28 @@ Route::delete('/notes/{noteId}', [NoteController::class, 'delete'])->name('notes
 </form>
 @endsection      
 ```
+
+### 変更箇所１
+単純に送信先が変わったのでそれに合わせ変更しました。
+```html
+<form method="POST" action="{{ route('notes.update', ['noteId' => $note->id]) }}">
+
+```
+
+### 変更箇所 2
+先ほど説明しましたがデフォルトではHTMLのformのメソッドははGETとPOST以外サポートしていません。  
+そこでLaravel側でPUTとして扱われるようにするために以下のコードを追加しました。
+```html
+@method('PUT')
+```
+
+### 変更箇所３
+oldヘルパ関数のの第二引数にControllerから渡されてきたnoteのタイトルを渡しています。  
+こうすることによって、以前入力したデータがなければ第二引数のタイトルが表示されます。  
+つまり、編集時初めて開いたときは編集対象のメモが表示され、  
+入力内容に何らかの問題があった場合はoldヘルパ関数によって入力内容が保持されます。
+```
+タイトル:<input type="text" name="title" value="{{ old('title', $note->title) }}">
+```
+
+
