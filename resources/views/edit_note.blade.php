@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
 @section('title')
-メモを作成
+メモを編集
 @endsection
 @section('content')
 <form method="POST" action="{{ route('notes.update', ['noteId' => $note->id]) }}">
     @csrf
+    @method('PUT')
 
     <div>
         タイトル:<input type="text" name="title" value="{{ old('title', $note->title) }}">
