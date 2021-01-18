@@ -37,4 +37,30 @@ class NoteController extends Controller
         $note = Note::findOrFail($noteId);
         return view('notes_detail', ['note' => $note]);
     }
+
+    public function edit($noteId)
+    {
+        $note = Note::findOrFail($noteId);
+
+        // 編集データの初期値としてnoteが必要なので渡しています。
+        return view('edit_note', ['note' => $note]);
+    }
+
+    public function update(CreateNoteRequest $request, $noteId)
+    {
+        // 更新対称のNoteを取得します。
+        $note = Note::findOrFail($noteId);
+
+        // title, textを連想配列で取得します。
+        $params = $request->only('title', 'text');
+
+        // 取得したNoteインスタンスに送られてきたデータ(title, text)を適応します。
+        $note->fill($params);
+
+        // Noteインスタンスの状態を保存します。
+        $note->save();
+
+        // 詳細画面に遷移する
+        return redirect()->route('get', ['noteId' => $noteId]);
+    }
 }

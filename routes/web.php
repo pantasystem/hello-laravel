@@ -24,6 +24,7 @@ Route::get('/notes/{noteId}', [NoteController::class, 'show'])->name('get')->whe
 Route::post('/notes', [NoteController::class, 'store'])->name('notes.create');
 
 // 更新と削除
+Route::get('/notes/{noteId}/edit', [NoteController::class, 'edit'])->name('notes.edit')->where(['noteId' => '[0-9]+']);
 Route::put('/notes/{noteId}', [NoteController::class, 'update'])->name('notes.update')->where(['noteId' => '[0-9]+']);
 Route::delete('/notes/{noteId}', [NoteController::class, 'delete'])->name('notes.delete')->where(['noteId' => '[0-9]+']);
 

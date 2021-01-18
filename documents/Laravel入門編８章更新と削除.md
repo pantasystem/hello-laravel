@@ -46,6 +46,7 @@ Route::get('/notes/{noteId}', [NoteController::class, 'show'])->name('get')->whe
 Route::post('/notes', [NoteController::class, 'store'])->name('notes.create');
 
 // 更新と削除
+Route::get('/notes/{noteId}/edit', [NoteController::class, 'edit'])->name('notes.edit')->where(['noteId' => '[0-9]+']);
 Route::put('/notes/{noteId}', [NoteController::class, 'update'])->name('notes.update')->where(['noteId' => '[0-9]+']);
 Route::delete('/notes/{noteId}', [NoteController::class, 'delete'])->name('notes.delete')->where(['noteId' => '[0-9]+']);
 ```
@@ -112,6 +113,49 @@ oldヘルパ関数のの第二引数にControllerから渡されてきたnoteの
 入力内容に何らかの問題があった場合はoldヘルパ関数によって入力内容が保持されます。
 ```
 タイトル:<input type="text" name="title" value="{{ old('title', $note->title) }}">
+```
+
+
+## Controllerの実装をする
+そろそろ慣れてきたころだと思うので、  
+editとupdate同時に実装します。
+> NoteController.php
+
+```php
+public function edit($noteId)
+{
+    $note = Note::findOrFail($noteId);
+
+    // 編集データの初期値としてnoteが必要なので渡しています。
+    return view('edit_note', ['note' => $note]);
+}
+```
+
+引き続き、今度はput先を実装します。  
+入力内容が作成時と完全に一致しているためCreateNoteRequestを流用しています。  
+~~気持ち悪いですが面倒なので放置します~~  
+
+> NoteController.php
+```php
+public function update(CreateNoteRequest $request, $noteId)
+{
+    // 更新対称のNoteを取得します。
+    $note = Note::findOrFail($noteId);
+
+    // title, textを連想配列で取得します。
+    $params = $request->only('title', 'text');
+
+    // 取得したNoteインスタンスに送られてきたデータ(title, text)を適応します。
+    $note->fill($params);
+
+    // Noteインスタンスの状態を保存します。
+    $note->save();
+
+    // 詳細画面に遷移する
+    return redirect()->route('get', ['noteId' => $noteId]);
+    
+}
+
 ```
 
 
