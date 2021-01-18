@@ -23,6 +23,10 @@ Route::get('/notes/new', [NoteController::class, 'new'])->name('notes.new');
 Route::get('/notes/{noteId}', [NoteController::class, 'show'])->name('get')->where(['noteId' => '[0-9]+']);
 Route::post('/notes', [NoteController::class, 'store'])->name('notes.create');
 
+// 更新と削除
+Route::put('/notes/{noteId}', [NoteController::class, 'update'])->name('notes.update')->where(['noteId' => '[0-9]+']);
+Route::delete('/notes/{noteId}', [NoteController::class, 'delete'])->name('notes.delete')->where(['noteId' => '[0-9]+']);
+
 Route::get('/', function () {
     return view('welcome');
 });
